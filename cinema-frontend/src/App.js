@@ -1,18 +1,25 @@
 import React from 'react';
-
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './login/Login';
+import { AuthProvider } from './context/AuthContext';
+import PrivateRoute from './route/PrivateRoute';
+import AdminPage from './admin-page/AdminPage';
 import MainPage from './main-page/MainPage';
-import MoviesMain from './admin-page/movies/MoviesMain';
-import ReservationMain from './admin-page/reservations/ReservationMain';
 
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/admin" element={<MoviesMain />} />
-        <Route path="/reservation" element={<ReservationMain />} />
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/admin"
+            element={<PrivateRoute element={<AdminPage />} />}
+          />
+          <Route path="*" element={<Login />} />
+          <Route path="/" element={<MainPage />} />
+        </Routes>
+      </AuthProvider>
     </Router>
   );
 }

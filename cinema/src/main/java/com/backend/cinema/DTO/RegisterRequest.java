@@ -4,7 +4,13 @@ public class RegisterRequest {
     private String username;
     private String password;
 
-    // Getters y Setters
+    
+    public RegisterRequest(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+   
     public String getUsername() {
         return username;
     }

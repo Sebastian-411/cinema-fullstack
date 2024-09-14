@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.backend.cinema.model.user.Collaborator;
+import com.backend.cinema.model.user.Customer;
 import com.backend.cinema.repository.user.CollaboratorRepository;
 
 import java.util.List;
@@ -27,15 +28,17 @@ public class CollaboratorService {
         return collaboratorRepository.findByUsername(username);
     }
 
-
     public Collaborator updateCollaborator(Long id, Collaborator collaborator) {
-        if (collaboratorRepository.existsById(id)) {
-            return collaboratorRepository.save(collaborator);
-        }
-        return null;
+        return collaboratorRepository.findById(id)
+                .map(existingCollaborator -> {
+                    existingCollaborator.setUsername(collaborator.getUsername());
+                    return collaboratorRepository.save(existingCollaborator);
+                })
+                .orElse(null);
     }
-
-    public void deleteCollaborator(Long id) {
+    
+    public boolean deleteCollaborator(Long id) {
         collaboratorRepository.deleteById(id);
+        return !collaboratorRepository.existsById(id);
     }
 }

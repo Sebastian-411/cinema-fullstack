@@ -34,7 +34,6 @@ public class SecurityConfig {
             )
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        // Añadir filtro para JWT
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

@@ -22,10 +22,9 @@ public class ReservationController {
     @Autowired
     private ScreeningScheduleService screeningScheduleService;
 
-
     @GetMapping("/private-collaborator")
-    public List<Reservation> getAllReservations() {
-        return reservationService.findAll();
+    public ResponseEntity<List<Reservation>> getAllReservations() {
+        return ResponseEntity.ok(reservationService.findAll());
     }
 
     @GetMapping("/private/{id}")
@@ -40,9 +39,11 @@ public class ReservationController {
         try {
             ScreeningSchedule schedule = screeningScheduleService.findById(reservation.getScreeningSchedule().getId())
                     .orElseThrow(() -> new RuntimeException("Screening schedule not found"));
+
             if (reservation.getAmountTicketsReserved() > schedule.getAvailableTickets()) {
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.badRequest().build(); 
             }
+
             schedule.reduceTickets(reservation.getAmountTicketsReserved());
             screeningScheduleService.save(schedule);
             return ResponseEntity.ok(reservationService.save(reservation));
@@ -57,10 +58,17 @@ public class ReservationController {
         return reservationService.findById(id)
                 .map(reservation -> {
                     reservation.setAmountTicketsReserved(reservationDetails.getAmountTicketsReserved());
-                    reservation.setCustomer(reservationDetails.getCustomer());
-                    reservation.setScreeningSchedule(reservationDetails.getScreeningSchedule());
                     return ResponseEntity.ok(reservationService.save(reservation));
                 })
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/private/{id}")
+    public ResponseEntity<Void> deleteReservation(@PathVariable Long id) {
+        if (reservationService.findById(id).isPresent()) {
+            reservationService.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }

@@ -6,7 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.backend.cinema.model.user.Collaborator;
+import com.backend.cinema.model.user.Customer;
 import com.backend.cinema.service.user.CollaboratorService;
+import com.backend.cinema.service.user.CustomerService;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,23 +26,41 @@ public class CollaboratorController {
     }
 
     @GetMapping("/private-collaborator/{id}")
-    public ResponseEntity<Optional<Collaborator>> getCollaboratorById(@PathVariable Long id) {
-        return ResponseEntity.ok(collaboratorService.getCollaboratorById(id));
+    public ResponseEntity<Collaborator> getCollaboratorById(@PathVariable Long id) {
+        Optional<Collaborator> collaborator = collaboratorService.getCollaboratorById(id);
+        if (collaborator.isPresent()) {
+            return ResponseEntity.ok(collaborator.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/private-collaborator/username/{username}")
     public ResponseEntity<Collaborator> getCollaboratorByUsername(@PathVariable String username) {
-        return ResponseEntity.ok(collaboratorService.getCollaboratorByUsername(username));
+        Collaborator collaborator = collaboratorService.getCollaboratorByUsername(username);
+        if (collaborator != null) {
+            return ResponseEntity.ok(collaborator);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/private-collaborator/{id}")
     public ResponseEntity<Collaborator> updateCollaborator(@PathVariable Long id, @RequestBody Collaborator collaborator) {
-        return ResponseEntity.ok(collaboratorService.updateCollaborator(id, collaborator));
+        Collaborator updatedCollaborator = collaboratorService.updateCollaborator(id, collaborator);
+        if (updatedCollaborator != null) {
+            return ResponseEntity.ok(updatedCollaborator);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/private-collaborator/{id}")
     public ResponseEntity<Void> deleteCollaborator(@PathVariable Long id) {
-        collaboratorService.deleteCollaborator(id);
-        return ResponseEntity.noContent().build();
+        if (collaboratorService.deleteCollaborator(id)) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.backend.cinema.DTO.MovieWithSchedulesDTO;
 import com.backend.cinema.model.movie.Movie;
@@ -22,13 +23,11 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 @RestController
 @RequestMapping("/api/movies")
 public class MovieController {
 
     private static final Logger logger = LoggerFactory.getLogger(MovieController.class);
-
 
     @Autowired
     private MovieService movieService;
@@ -49,13 +48,10 @@ public class MovieController {
 
     @GetMapping("/screening-schedules")
     public List<MovieWithSchedulesDTO> getMoviesWithSchedules() {
-        logger.info("Buscando películas con horarios...");
 
         List<Movie> movies = movieRepository.findAll();
-        logger.info("Películas encontradas: " + movies.size());
 
         List<ScreeningSchedule> schedules = screeningScheduleRepository.findAll();
-        logger.info("Horarios encontrados: " + schedules.size());
 
         return movies.stream().map(movie -> {
             MovieWithSchedulesDTO dto = new MovieWithSchedulesDTO();
@@ -94,9 +90,9 @@ public class MovieController {
     public ResponseEntity<Movie> createMovie(
             @ModelAttribute Movie movie,
             @RequestPart("file") MultipartFile file) {
-
         try {
             String fileName = fileStorageService.storeFile(file);
+
             movie.setImageUrl(fileName);
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

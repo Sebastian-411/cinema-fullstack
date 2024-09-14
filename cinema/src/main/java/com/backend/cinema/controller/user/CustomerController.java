@@ -24,24 +24,41 @@ public class CustomerController {
     }
 
     @GetMapping("/private/{id}")
-    public ResponseEntity<Optional<Customer>> getCustomerById(@PathVariable Long id) {
-        return ResponseEntity.ok(customerService.getCustomerById(id));
+    public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
+        Optional<Customer> customer = customerService.getCustomerById(id);
+        if (customer.isPresent()) {
+            return ResponseEntity.ok(customer.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/private/username/{username}")
     public ResponseEntity<Customer> getCustomerByUsername(@PathVariable String username) {
-        return ResponseEntity.ok(customerService.getCustomerByUsername(username));
+        Customer customer = customerService.getCustomerByUsername(username);
+        if (customer != null) {
+            return ResponseEntity.ok(customer);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
-
 
     @PutMapping("/private/{id}")
     public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @RequestBody Customer customer) {
-        return ResponseEntity.ok(customerService.updateCustomer(id, customer));
+        Customer updatedCustomer = customerService.updateCustomer(id, customer);
+        if (updatedCustomer != null) {
+            return ResponseEntity.ok(updatedCustomer);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/private/{id}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
-        customerService.deleteCustomer(id);
-        return ResponseEntity.noContent().build();
+        if (customerService.deleteCustomer(id)) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

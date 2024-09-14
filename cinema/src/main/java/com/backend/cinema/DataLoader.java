@@ -1,5 +1,6 @@
 package com.backend.cinema;
 
+import com.backend.cinema.controller.auth.AuthController;
 import com.backend.cinema.model.movie.Movie;
 import com.backend.cinema.model.reservation.Reservation;
 import com.backend.cinema.model.theater.ScreeningSchedule;
@@ -11,6 +12,8 @@ import com.backend.cinema.repository.reservation.ReservationRepository;
 import com.backend.cinema.repository.theater.ScreeningScheduleRepository;
 import com.backend.cinema.repository.theater.TheaterRoomRepository;
 import com.backend.cinema.repository.user.UserRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +32,9 @@ public class DataLoader implements CommandLineRunner {
     private final TheaterRoomRepository theaterRoomRepository;
     private final UserRepository userRepository;
 
+    @Autowired
+    public AuthController authController = new AuthController();
+
     public DataLoader(MovieRepository movieRepository,
                       ReservationRepository reservationRepository,
                       ScreeningScheduleRepository screeningScheduleRepository,
@@ -43,7 +49,6 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Check if movies are already present
         if (movieRepository.count() == 0) {
             // Create Movies
             Movie movie1 = new Movie();
@@ -94,10 +99,11 @@ public class DataLoader implements CommandLineRunner {
             customer.setPassword("password");
             userRepository.save(customer);
 
-            Collaborator collaborator = new Collaborator();
-            collaborator.setUsername("jane_doe");
-            collaborator.setPassword("password");
-            userRepository.save(collaborator);
+
+
+
+            authController.registerCollaborator(new com.backend.cinema.DTO.RegisterRequest("jane_doe", "password"));
+
 
             // Create Reservations
             Reservation reservation1 = new Reservation();

@@ -29,13 +29,16 @@ public class CustomerService {
 
 
     public Customer updateCustomer(Long id, Customer customer) {
-        if (customerRepository.existsById(id)) {
-            return customerRepository.save(customer);
-        }
-        return null;
+        return customerRepository.findById(id)
+            .map(existingCustomer -> {
+                existingCustomer.setUsername(customer.getUsername());
+                return customerRepository.save(existingCustomer);
+            })
+            .orElse(null);
     }
 
-    public void deleteCustomer(Long id) {
+    public boolean deleteCustomer(Long id) {
         customerRepository.deleteById(id);
+        return !customerRepository.existsById(id);
     }
 }

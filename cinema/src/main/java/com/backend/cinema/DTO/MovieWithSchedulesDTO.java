@@ -14,7 +14,7 @@ public class MovieWithSchedulesDTO {
     private String imageUrl;
     private List<ScreeningScheduleDTO> schedules;
     
-    // Getters and Setters
+
 
     public static class ScreeningScheduleDTO {
         private Long id;
@@ -47,7 +47,7 @@ public class MovieWithSchedulesDTO {
             this.roomId = roomId;
         }
         
-        // Getters and Setters
+    
     }
 
     public Long getId() {

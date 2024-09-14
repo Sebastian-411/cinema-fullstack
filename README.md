@@ -1,97 +1,55 @@
-Puedo ayudarte a completar el documento que mencionas agregando más detalles sobre el análisis del problema y su solución. A continuación te proporciono un borrador para continuar:
+# Evolución del Proyecto: De la Idea Inicial a la Solución Final
 
----
+### Idea Inicial
 
-# cinema-fullstack
-Fullstack cinema management app with movie scheduling, screening rooms, and reservations. Built with Spring Boot and React.
+La idea inicial del proyecto era desarrollar una aplicación de gestión de cine que incluyera funcionalidades básicas como:
 
-## DESARROLLO PASO A PASO
+- **Registro de películas**: Ingresar detalles sobre las películas a proyectar.
+- **Registro de salas de proyección**: Crear y gestionar las salas donde se mostrarán las películas.
+- **Horarios de proyección**: Establecer y consultar los horarios en los que se proyectarán las películas.
+- **Reservaciones**: Permitir a los clientes realizar reservaciones para las proyecciones.
 
-### ANALIZAR EL PROBLEMA
+Las entidades principales identificadas eran **Películas**, **Salas**, **Horarios de proyección**, **Reservaciones** y **Clientes**.
 
-#### ¿Qué se solicita?
+### Modelado de la Base de Datos
 
-Se solicita una aplicación que se comunique por medio de un API REST. Se requiere una aplicación backend en Spring Boot y una aplicación frontend en React. En específico, la aplicación necesita consultar una base de datos relacional para almacenar y gestionar los datos.
-
-#### En primera instancia, tenemos los siguientes requisitos:
-
-- Registro de películas a proyectar.
-- Registro de salas de proyección.
-- Horarios de proyección.
-- Reservaciones hechas por cliente.
-
-#### Las entidades principales que manejaremos son:
-
-1. **Películas**:
-   - Título de la película.
-   - Director.
-   - Duración.
-   - Fecha de estreno.
-
-2. **Salas**:
-   - Número de sala.
-   - Capacidad.
-
-3. **Horarios de proyección**:
-   - Fecha y hora de inicio de la proyección.
-
-4. **Reservaciones**:
-   - Cliente que realiza la reserva.
-   - Cantidad de asientos reservados.
-
-5. **Clientes**:
-   - Nombre del cliente.
-   - Información de contacto.
-
-### MODELADO DE LA BASE DE DATOS
-
-Para almacenar toda esta información, se diseñará una base de datos relacional. El modelo debe ser capaz de gestionar la información de las películas, salas, horarios de proyección y las reservaciones de los clientes.
-
-**Relaciones principales:**
+La base de datos debía reflejar las relaciones entre estas entidades, como:
 - Las películas se proyectan en una o más salas.
-- Las salas tienen horarios de proyección específicos.
-- Los clientes pueden realizar reservaciones para una película en un horario determinado en una sala específica.
+- Las salas tienen horarios específicos para las proyecciones.
+- Los clientes pueden hacer reservaciones en horarios específicos y en salas determinadas.
 
-### DIAGRAMA DE BASE DE DATOS
+### Desarrollo del Backend
 
-(En este apartado puedes incluir el diagrama de la base de datos, siguiendo las relaciones descritas anteriormente).
+El backend se construyó usando **Spring Boot** y se enfocó en crear una API REST que permitiera la interacción con los datos a través de:
 
-### DESARROLLO DEL BACKEND
+- **Controladores**: Para manejar las solicitudes HTTP (por ejemplo, `GET /movies` para obtener la lista de películas).
+- **Servicios**: Para gestionar la lógica de negocio, como la validación de reservaciones.
+- **Repositorios**: Para interactuar con la base de datos y realizar operaciones CRUD.
 
-Se utilizará Spring Boot para implementar el backend, que estará compuesto por los siguientes módulos:
+### Desarrollo del Frontend
 
-1. **Controladores**: Manejarán las solicitudes HTTP que el frontend envía a la API REST.
-2. **Servicios**: Contendrán la lógica de negocio, como la validación de reservaciones, horarios disponibles, etc.
-3. **Repositorios**: Se encargarán de interactuar con la base de datos.
+El frontend se desarrolló con **React**. Los componentes principales incluyeron:
 
-#### Endpoints:
-- **GET /movies**: Obtener la lista de películas.
-- **GET /rooms**: Obtener la lista de salas.
-- **GET /schedule**: Obtener los horarios de proyección.
-- **POST /reservations**: Crear una reservación.
-- **DELETE /reservations/{id}**: Cancelar una reservación.
+- **MoviesList**: Para mostrar la lista de películas.
+- **ReservationForm**: Para que los usuarios pudieran realizar reservas.
+- **ReservationList**: Para mostrar y cancelar reservaciones existentes.
 
-### DESARROLLO DEL FRONTEND
+### Iteraciones y Mejoras
 
-Utilizaremos React para implementar el frontend. Este interactuará con la API REST proporcionada por el backend.
+A medida que el proyecto avanzaba, surgieron nuevas necesidades y mejoras, reflejadas en la solución final:
 
-**Componentes principales:**
-1. **MoviesList**: Mostrará las películas disponibles.
-2. **ReservationForm**: Permitirá a los usuarios hacer una reservación.
-3. **ReservationList**: Mostrará las reservaciones actuales y permitirá cancelarlas.
+1. **Expansión de Funcionalidades**:
+   - **Autenticación y Seguridad**: Implementación de JWT para asegurar la autenticación de los usuarios y proteger los endpoints de la API.
+   - **Administración de Imágenes**: Añadido un controlador para gestionar la carga y visualización de imágenes relacionadas con las películas.
 
-### BUENAS PRÁCTICAS DE DESARROLLO
+2. **Organización y Estructura**:
+   - **Backend**: Se mejoró la estructura del proyecto para incluir módulos específicos, como `auth`, `image`, `movie`, `reservation`, `theater`, y `user`, facilitando la extensión y el mantenimiento del código.
+   - **Frontend**: Se organizó el código en componentes modulares, incluyendo páginas de administración (`admin-page`), páginas principales (`main-page`), y componentes reutilizables (`components`).
 
-- **Seguridad**: Uso de JWT para la autenticación de los usuarios.
-- **Documentación**: Swagger para documentar y probar los endpoints de la API.
-- **Modularidad**: Código organizado en controladores, servicios y repositorios para garantizar un fácil mantenimiento.
-  
-### ESTRATEGIAS PARA EXTENSIBILIDAD Y MANTENIMIENTO
+3. **Mejoras en la Usabilidad y Mantenimiento**:
+   - **Documentación y Pruebas**: Implementación de Swagger para la documentación de la API y pruebas unitarias para asegurar la calidad del software.
+   - **Despliegue y Configuración**: Uso de Docker para la contenedorización y configuración de despliegue automatizado.
 
-- **Pruebas unitarias**: Implementar pruebas con JUnit y Mockito para el backend.
-- **Despliegue automatizado**: Uso de Docker y CI/CD para facilitar el despliegue.
-- **Modularidad en el frontend**: Componentes React reutilizables y estructura basada en hooks.
+### Conclusión
 
----
-
-Este esquema puede ayudarte a estructurar la aplicación de manera más clara. ¿Te gustaría que agreguemos más detalles en alguna sección?
+La transición desde la idea inicial a la solución final involucró una serie de mejoras y expansiones para abordar nuevos requerimientos y optimizar el diseño. La solución final se caracteriza por su robustez en términos de seguridad, modularidad y facilidad de mantenimiento, reflejando una evolución que permitió adaptarse a necesidades adicionales y mejorar la funcionalidad general de la aplicación.

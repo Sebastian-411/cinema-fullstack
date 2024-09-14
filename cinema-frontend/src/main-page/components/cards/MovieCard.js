@@ -9,7 +9,7 @@ function MovieCard({ url, name, description, id }) {
       >
         <img
           className="object-cover w-full rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
-          src={url}
+          src={"http://localhost:8080/api/images/" + url}
           alt={name}
         />
         <div className="flex flex-col justify-between p-4 leading-normal">

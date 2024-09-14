@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // Importa Axios
+import axios from 'axios'; 
 import Hero from './components/Hero';
 import CinemaList from './components/CinemaList';
 import CinemaFunctions from './components/CinemaFunctions';

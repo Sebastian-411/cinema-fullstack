@@ -23,7 +23,7 @@ public class FileStorageService {
     }
 
     public String storeFile(MultipartFile file) throws IOException {
-        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename().replace(" ", "_");
         Path path = getPath(fileName);
         Files.copy(file.getInputStream(), path);
         return fileName;

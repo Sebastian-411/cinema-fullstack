@@ -70,7 +70,6 @@ public class ScreeningSchedule {
         this.availableTickets = availableTickets;
     }
 
-    // Método para reducir los tiquetes disponibles
     public void reduceTickets(int amount) {
         this.availableTickets -= amount;
     }
