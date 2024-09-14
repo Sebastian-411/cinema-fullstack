@@ -1,15 +1,30 @@
-FROM maven:3.9-eclipse-temurin-17 AS build
+# Utiliza una imagen oficial de Maven y OpenJDK para compilar el proyecto
+FROM maven:3.9.2-eclipse-temurin-17 AS build
 
-COPY src /app/src
-COPY pom.xml /app
-
+# Establece el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
+# Copia el archivo pom.xml y descarga las dependencias
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
 
-RUN mvn clean package
+# Copia todo el código fuente del proyecto
+COPY src ./src
 
-FROM openjdk:17-jdk-alpine
+# Compila el proyecto y empaqueta en un archivo JAR
+RUN mvn clean package -DskipTests
 
-COPY --from=build /app/target/cinema.jar /app/cinema.jar
+# Usa una imagen ligera de JDK para ejecutar el JAR
+FROM eclipse-temurin:17-jdk-jammy
 
+# Establece el directorio de trabajo
+WORKDIR /app
+
+# Copia el JAR generado desde el contenedor de construcción
+COPY --from=build /app/target/cinema-0.0.1-SNAPSHOT.jar /app/cinema.jar
+
+# Exponer el puerto 8080
+EXPOSE 8080
+
+# Comando para ejecutar el JAR
 ENTRYPOINT ["java", "-jar", "/app/cinema.jar"]
